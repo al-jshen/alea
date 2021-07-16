@@ -141,6 +141,11 @@ impl Rng {
     }
 
     #[inline]
+    pub fn bool(&self) -> bool {
+        self.f32() < 0.5
+    }
+
+    #[inline]
     pub fn wyhash_u64(&self) -> u64 {
         self.0.set(self.0.get() + 0x60bee2bee120fc15);
         let mut tmp: u128 = (self.0.get() as u128) * 0xa3b195354a39b70d;
@@ -190,7 +195,7 @@ macro_rules! impl_rng_functions_helper_3 {
     }
 }
 
-impl_rng_functions_helper_1!("Generate a random `" "` value." | u64, u32, i64, i32,);
+impl_rng_functions_helper_1!("Generate a random `" "` value." | u64, u32, i64, i32, bool,);
 impl_rng_functions_helper_1!("Generate a random `" "` value in the range [0, 1)." | f64, f32,);
 impl_rng_functions_helper_2!("Generate a random `" "` value less than `max`." | u64_less_than u64, u32_less_than u32, i64_less_than i64, i32_less_than i32,);
 impl_rng_functions_helper_2!("Generate a random `" "` value in the range [0, max)." | f64_less_than f64, f32_less_than f32,);
