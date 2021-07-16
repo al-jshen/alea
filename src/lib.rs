@@ -7,6 +7,7 @@ use std::{
 };
 
 #[derive(Debug)]
+/// Random number generator.
 pub struct Rng(Cell<u64>);
 
 impl Rng {
@@ -172,23 +173,25 @@ macro_rules! impl_rng_functions {
 }
 
 macro_rules! impl_rng_functions_helper_1 {
-    ($($type: ident, )+) => {
-        impl_rng_functions!("Generate a random " " value." | $($type $type, )+);
+    ($doc1: tt $doc2: tt | $($type: ident, )+) => {
+        impl_rng_functions!($doc1 $doc2 | $($type $type, )+);
     };
 }
 
 macro_rules! impl_rng_functions_helper_2 {
-    ($($fn: tt $type: ident, )+) => {
-        impl_rng_functions!("Generate a random " " value less than max." | $($fn $type max, )+);
+    ($doc1: tt $doc2: tt | $($fn: tt $type: ident, )+) => {
+        impl_rng_functions!($doc1 $doc2 | $($fn $type max, )+);
     };
 }
 
 macro_rules! impl_rng_functions_helper_3 {
     ($($fn: tt $type: ident, )+) => {
-        impl_rng_functions!("Generate a random " " value in the range [min, max)." | $($fn $type min max, )+);
-    };
+        impl_rng_functions!("Generate a random `" "` value in the range [min, max)." | $($fn $type min max, )+);
+    }
 }
 
-impl_rng_functions_helper_1!(u64, u32, f64, f32, i64, i32,);
-impl_rng_functions_helper_2!(u64_less_than u64, u32_less_than u32, f64_less_than f64, f32_less_than f32, i64_less_than i64, i32_less_than i32,);
+impl_rng_functions_helper_1!("Generate a random `" "` value." | u64, u32, i64, i32,);
+impl_rng_functions_helper_1!("Generate a random `" "` value in the range [0, 1)." | f64, f32,);
+impl_rng_functions_helper_2!("Generate a random `" "` value less than `max`." | u64_less_than u64, u32_less_than u32, i64_less_than i64, i32_less_than i32,);
+impl_rng_functions_helper_2!("Generate a random `" "` value in the range [0, max)." | f64_less_than f64, f32_less_than f32,);
 impl_rng_functions_helper_3!(u64_in_range u64, u32_in_range u32, f64_in_range f64, f32_in_range f32, i64_in_range i64, i32_in_range i32,);
