@@ -1,0 +1,16 @@
+[package]
+name = "alea"
+version = "0.1.0"
+authors = ["Jeff Shen <jshen2014@hotmail.com>"]
+edition = "2018"
+license = "MIT OR Apache-2.0"
+
+readme = "README.md"
+description = "A crate for randomness."
+repository = "https://github.com/al-jshen/alea"
+
+categories = ["algorithms"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
