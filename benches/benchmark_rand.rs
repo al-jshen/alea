@@ -40,11 +40,36 @@ fn criterion_i32(c: &mut Criterion) {
     });
 }
 
+fn criterion_i64(c: &mut Criterion) {
+    c.bench_function("fastrand i64", |b| {
+        b.iter(|| fastrand::i64(i64::MIN..i64::MAX))
+    });
+    c.bench_function("alea i64", |b| b.iter(|| alea::i64()));
+    c.bench_function("fastrand i64 in range", |b| {
+        b.iter(|| fastrand::i64(-20..10))
+    });
+    c.bench_function("alea i64 in range", |b| {
+        b.iter(|| alea::i64_in_range(-20, 10))
+    });
+}
+
 fn criterion_f64(c: &mut Criterion) {
     c.bench_function("fastrand f64", |b| b.iter(|| fastrand::f64()));
     c.bench_function("alea f64", |b| b.iter(|| alea::f64()));
-    // c.bench_function("alea wyhash f64", |b| b.iter(|| alea::wyhash_f64()));
 }
 
-criterion_group!(benches, criterion_u64);
+fn criterion_f32(c: &mut Criterion) {
+    c.bench_function("fastrand f32", |b| b.iter(|| fastrand::f32()));
+    c.bench_function("alea f32", |b| b.iter(|| alea::f32()));
+}
+
+criterion_group!(
+    benches,
+    // criterion_u32,
+    // criterion_u64,
+    // criterion_f64,
+    // criterion_f32
+    criterion_i64,
+    criterion_i32
+);
 criterion_main!(benches);
