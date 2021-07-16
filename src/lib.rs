@@ -1,5 +1,3 @@
-pub mod wyhash;
-
 use std::cell::Cell;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};

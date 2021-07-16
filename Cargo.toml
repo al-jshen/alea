@@ -15,5 +15,10 @@ categories = ["algorithms"]
 
 [dependencies]
 
-[dev-dependncies]
+[dev-dependencies]
 criterion = "0.3"
+fastrand = "1"
+
+[[bench]]
+name = "benchmark_rand"
+harness = false
