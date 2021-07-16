@@ -11,6 +11,7 @@ use std::{
 pub struct Rng(Cell<u64>);
 
 impl Rng {
+    #[inline]
     pub fn new() -> Self {
         Self::with_seed({
             let mut hasher = DefaultHasher::new();
@@ -21,19 +22,26 @@ impl Rng {
         })
     }
 
+    #[inline]
     pub const fn with_seed(seed: u64) -> Self {
         Self { 0: Cell::new(seed) }
     }
 
+    #[inline]
     pub fn get_seed(&self) -> u64 {
         self.0.get()
+    }
+
+    #[inline]
+    pub fn set_seed(&self, seed: u64) {
+        self.0.set(seed);
     }
 
     #[inline]
     pub fn u64(&self) -> u64 {
         self.0.set(self.0.get() + 0xa0761d6478bd642f);
         let s = self.0.get();
-        let t = u128::from(s) * u128::from(s ^ 0xe7037ed1a0b428db);
+        let t = u128::from(s) * (u128::from(s ^ 0xe7037ed1a0b428db));
         ((t >> 64) as u64) ^ (t as u64)
     }
 
@@ -64,22 +72,34 @@ impl Rng {
 
     #[inline]
     pub fn u64_less_than(&self, max: u64) -> u64 {
-        loop {
-            let val = self.u64();
-            if val < max {
-                return val;
+        let mut r = self.u64();
+        let mut hi = mul_high_u64(r, max);
+        let mut lo = r.wrapping_mul(max);
+        if lo < max {
+            let t = max.wrapping_neg() % max;
+            while lo < t {
+                r = self.u64();
+                hi = mul_high_u64(r, max);
+                lo = r.wrapping_mul(max);
             }
         }
+        hi
     }
 
     #[inline]
     pub fn u32_less_than(&self, max: u32) -> u32 {
-        loop {
-            let val = self.u32();
-            if val < max {
-                return val;
+        let mut r = self.u32();
+        let mut hi = mul_high_u32(r, max);
+        let mut lo = r.wrapping_mul(max);
+        if lo < max {
+            let t = max.wrapping_neg() % max;
+            while lo < t {
+                r = self.u32();
+                hi = mul_high_u32(r, max);
+                lo = r.wrapping_mul(max);
             }
         }
+        hi
     }
 
     #[inline]
@@ -107,13 +127,13 @@ impl Rng {
     #[inline]
     pub fn u64_in_range(&self, min: u64, max: u64) -> u64 {
         assert!(max > min, "max must be greater than min");
-        min + self.u64_less_than(max - min)
+        min + self.u64_less_than(max + 1 - min)
     }
 
     #[inline]
     pub fn u32_in_range(&self, min: u32, max: u32) -> u32 {
         assert!(max > min, "max must be greater than min");
-        min + self.u32_less_than(max - min)
+        min + self.u32_less_than(max + 1 - min)
     }
 
     #[inline]
@@ -131,13 +151,13 @@ impl Rng {
     #[inline]
     pub fn i64_in_range(&self, min: i64, max: i64) -> i64 {
         assert!(max > min, "max must be greater than min");
-        min + self.i64_less_than(max - min)
+        min + self.i64_less_than(max + 1 - min)
     }
 
     #[inline]
     pub fn i32_in_range(&self, min: i32, max: i32) -> i32 {
         assert!(max > min, "max must be greater than min");
-        min + self.i32_less_than(max - min)
+        min + self.i32_less_than(max + 1 - min)
     }
 
     #[inline]
@@ -160,39 +180,59 @@ impl Rng {
     }
 }
 
+#[inline]
+fn mul_high_u32(a: u32, b: u32) -> u32 {
+    (((a as u64) * (b as u64)) >> 32) as u32
+}
+
+#[inline]
+fn mul_high_u64(a: u64, b: u64) -> u64 {
+    (((a as u128) * (b as u128)) >> 64) as u64
+}
+
 thread_local! {
     static RNG: Rng = Rng::new();
 }
 
+#[doc = "Get the seed for the random number generator."]
+pub fn get_seed() -> u64 {
+    RNG.with(|rng| rng.get_seed())
+}
+
+#[doc = "Set the seed for the random number generator."]
+pub fn set_seed(seed: u64) {
+    RNG.with(|rng| rng.set_seed(seed));
+}
+
 macro_rules! impl_rng_functions {
-    ($doc1: tt $doc2: tt | $($fn: ident $type: ident $($arg: ident)* ),+ $(,)?) => {
-        $(
-            #[doc = $doc1]
-            #[doc = stringify!($type)]
-            #[doc = $doc2]
-            pub fn $fn( $($arg: $type, )* ) -> $type {
-                RNG.with(|rng| rng.$fn( $($arg, )* ))
-            }
-        )+
-    };
+($doc1: tt $doc2: tt | $($fn: ident $type: ident $($arg: ident)* ),+ $(,)?) => {
+    $(
+    #[doc = $doc1]
+    #[doc = stringify!($type)]
+    #[doc = $doc2]
+    pub fn $fn( $($arg: $type, )* ) -> $type {
+        RNG.with(|rng| rng.$fn( $($arg, )* ))
+    }
+    )+
+};
 }
 
 macro_rules! impl_rng_functions_helper_1 {
-    ($doc1: tt $doc2: tt | $($type: ident, )+) => {
-        impl_rng_functions!($doc1 $doc2 | $($type $type, )+);
-    };
+($doc1: tt $doc2: tt | $($type: ident, )+) => {
+    impl_rng_functions!($doc1 $doc2 | $($type $type, )+);
+};
 }
 
 macro_rules! impl_rng_functions_helper_2 {
-    ($doc1: tt $doc2: tt | $($fn: tt $type: ident, )+) => {
-        impl_rng_functions!($doc1 $doc2 | $($fn $type max, )+);
-    };
+($doc1: tt $doc2: tt | $($fn: tt $type: ident, )+) => {
+    impl_rng_functions!($doc1 $doc2 | $($fn $type max, )+);
+};
 }
 
 macro_rules! impl_rng_functions_helper_3 {
-    ($($fn: tt $type: ident, )+) => {
-        impl_rng_functions!("Generate a random `" "` value in the range [min, max)." | $($fn $type min max, )+);
-    }
+($($fn: tt $type: ident, )+) => {
+    impl_rng_functions!("Generate a random `" "` value in the range [min, max] (i.e., both endpoints are included)." | $($fn $type min max, )+);
+}
 }
 
 impl_rng_functions_helper_1!("Generate a random `" "` value." | u64, u32, i64, i32, bool,);
