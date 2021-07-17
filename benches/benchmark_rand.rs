@@ -1,15 +1,24 @@
 use criterion::{criterion_group, criterion_main, Criterion};
+use rand::prelude::*;
 
 fn criterion_u64(c: &mut Criterion) {
     c.bench_function("fastrand u64", |b| {
         b.iter(|| fastrand::u64(u64::MIN..u64::MAX))
     });
     c.bench_function("alea u64", |b| b.iter(|| alea::u64()));
+    c.bench_function("rand u64", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<u64>());
+    });
     c.bench_function("fastrand u64 in range", |b| {
         b.iter(|| fastrand::u64(20..200))
     });
     c.bench_function("alea u64 in range", |b| {
         b.iter(|| alea::u64_in_range(20, 200))
+    });
+    c.bench_function("rand u64 in range", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen_range(20_u64..200));
     });
 }
 
@@ -18,11 +27,19 @@ fn criterion_u32(c: &mut Criterion) {
         b.iter(|| fastrand::u32(u32::MIN..u32::MAX))
     });
     c.bench_function("alea u32", |b| b.iter(|| alea::u32()));
+    c.bench_function("rand u32", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<u32>());
+    });
     c.bench_function("fastrand u32 in range", |b| {
         b.iter(|| fastrand::u32(20..200))
     });
     c.bench_function("alea u32 in range", |b| {
         b.iter(|| alea::u32_in_range(20, 200))
+    });
+    c.bench_function("rand u32 in range", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen_range(20_u32..200));
     });
 }
 
@@ -31,11 +48,20 @@ fn criterion_i32(c: &mut Criterion) {
         b.iter(|| fastrand::i32(i32::MIN..i32::MAX))
     });
     c.bench_function("alea i32", |b| b.iter(|| alea::i32()));
+    c.bench_function("rand i32", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<i32>());
+    });
+
     c.bench_function("fastrand i32 in range", |b| {
         b.iter(|| fastrand::i32(-20..10))
     });
     c.bench_function("alea i32 in range", |b| {
         b.iter(|| alea::i32_in_range(-20, 10))
+    });
+    c.bench_function("rand i32 in range", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen_range(-20_i32..10));
     });
 }
 
@@ -44,22 +70,38 @@ fn criterion_i64(c: &mut Criterion) {
         b.iter(|| fastrand::i64(i64::MIN..i64::MAX))
     });
     c.bench_function("alea i64", |b| b.iter(|| alea::i64()));
+    c.bench_function("rand i64", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<i64>());
+    });
     c.bench_function("fastrand i64 in range", |b| {
         b.iter(|| fastrand::i64(-20..10))
     });
     c.bench_function("alea i64 in range", |b| {
         b.iter(|| alea::i64_in_range(-20, 10))
     });
+    c.bench_function("rand i64 in range", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen_range(-20_i64..10));
+    });
 }
 
 fn criterion_f64(c: &mut Criterion) {
     c.bench_function("fastrand f64", |b| b.iter(|| fastrand::f64()));
     c.bench_function("alea f64", |b| b.iter(|| alea::f64()));
+    c.bench_function("rand f64", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<f64>());
+    });
 }
 
 fn criterion_f32(c: &mut Criterion) {
     c.bench_function("fastrand f32", |b| b.iter(|| fastrand::f32()));
     c.bench_function("alea f32", |b| b.iter(|| alea::f32()));
+    c.bench_function("rand f32", |b| {
+        let mut rng = rand::thread_rng();
+        b.iter(|| rng.gen::<f32>());
+    });
 }
 
 criterion_group!(

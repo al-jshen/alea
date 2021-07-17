@@ -18,6 +18,7 @@ categories = ["algorithms"]
 [dev-dependencies]
 criterion = "0.3"
 fastrand = "1"
+rand = "0.8"
 
 [[bench]]
 name = "benchmark_rand"
