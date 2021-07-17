@@ -5,15 +5,23 @@
 [![Documentation](https://docs.rs/alea/badge.svg)](https://docs.rs/alea)
 ![License](https://img.shields.io/crates/l/alea?label=License)
 
-A crate for fast number generation, with a focus on ease of use (no more passing `&mut rng` everywhere!).
+A zero-dependency crate for fast number generation, with a focus on ease of use (no more passing `&mut rng` everywhere!).
 
-The implementation is based on [WyHash](https://github.com/wangyi-fudan/wyhash), a high-quality and fast generator. 
+The implementation is based on [wyrand](https://github.com/wangyi-fudan/wyhash), a high-quality and fast generator. 
 
 This crate is heavily inspired by [`fastrand`](https://github.com/smol-rs/fastrand).
 
+## Usage
+
+Add the following to your `Cargo.toml`:
+```rust
+[dependencies]
+alea = "0.2"
+```
+
 ## Examples
 
-Coin flip: 
+Flip a coin:
 ```rust
 if alea::bool() {
   println!("heads");
@@ -44,7 +52,10 @@ alea::set_seed(10);
 
 ## Benchmarks
 
-Benchmarks are run with [`criterion.rs`](https://github.com/bheisler/criterion.rs). The reported values are the means and standard deviations. 
+Benchmarks are run with [`criterion.rs`](https://github.com/bheisler/criterion.rs). The reported values are the means and standard deviations. To run the benchmarks yourself, clone the repository and run 
+```
+cargo bench
+```
 
 |              | alea                    | fastrand                 |
 |--------------|-------------------------|--------------------------|
