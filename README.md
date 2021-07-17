@@ -9,7 +9,7 @@ A zero-dependency crate for fast number generation, with a focus on ease of use 
 
 The implementation is based on [wyrand](https://github.com/wangyi-fudan/wyhash), a high-quality and fast generator. 
 
-This crate is heavily inspired by [`fastrand`](https://github.com/smol-rs/fastrand).
+This crate is heavily inspired by [fastrand](https://github.com/smol-rs/fastrand).
 
 ## Usage
 
@@ -57,7 +57,7 @@ Benchmarks are run with [`criterion.rs`](https://github.com/bheisler/criterion.r
 cargo bench
 ```
 
-|              | alea                    | fastrand                | rand                    |
+| | [alea](https://github.com/al-jshen/alea) | [fastrand](https://github.com/smol-rs/fastrand) | [rand](https://github.com/rust-random/rand) |
 |--------------|-------------------------|-------------------------|-------------------------|
 | f64          | **2.0002 ns +/- 21.718 ps** | 3.6868 ns +/- 40.030 ps | 4.7417 ns +/- 75.082 ps |
 | f32          | 2.0911 ns +/- 87.985 ps | 2.6735 ns +/- 35.334 ps | **1.8259 ns +/- 34.666 ps** |
