@@ -39,7 +39,7 @@ impl Rng {
 
     #[inline]
     pub fn u64(&self) -> u64 {
-        self.0.set(self.0.get() + 0xa0761d6478bd642f);
+        self.0.set(self.0.get().wrapping_add(0xa0761d6478bd642f));
         let s = self.0.get();
         let t = u128::from(s) * (u128::from(s ^ 0xe7037ed1a0b428db));
         ((t >> 64) as u64) ^ (t as u64)
