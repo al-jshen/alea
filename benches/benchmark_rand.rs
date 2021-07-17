@@ -11,7 +11,6 @@ fn criterion_u64(c: &mut Criterion) {
     c.bench_function("alea u64 in range", |b| {
         b.iter(|| alea::u64_in_range(20, 200))
     });
-    // c.bench_function("alea wyhash u64", |b| b.iter(|| alea::wyhash_u64()));
 }
 
 fn criterion_u32(c: &mut Criterion) {
@@ -65,10 +64,10 @@ fn criterion_f32(c: &mut Criterion) {
 
 criterion_group!(
     benches,
-    // criterion_u32,
-    // criterion_u64,
-    // criterion_f64,
-    // criterion_f32
+    criterion_u32,
+    criterion_u64,
+    criterion_f64,
+    criterion_f32,
     criterion_i64,
     criterion_i32
 );
