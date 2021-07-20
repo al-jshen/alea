@@ -10,6 +10,8 @@ use std::{
 /// Random number generator.
 pub struct Rng(Cell<u64>);
 
+const CF64: f64 = 1.0 / ((1u64 << 53) as f64);
+
 impl Rng {
     #[inline]
     pub fn new() -> Self {
@@ -52,7 +54,7 @@ impl Rng {
 
     #[inline]
     pub fn f64(&self) -> f64 {
-        (self.u64() as f64) / (u64::MAX as f64)
+        ((self.u64() >> 11) as f64) * CF64
     }
 
     #[inline]
