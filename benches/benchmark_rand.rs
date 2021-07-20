@@ -15,6 +15,11 @@ fn criterion_u64(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen::<u64>());
     });
+    c.bench_function("rand_xorshift u64", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen::<u64>());
+    });
+
     c.bench_function("fastrand u64 in range", |b| {
         b.iter(|| fastrand::u64(20..200))
     });
@@ -34,6 +39,10 @@ fn criterion_u64(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen_range(20_u64..200));
     });
+    c.bench_function("rand_xorshift u64 in range", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen_range(20_u64..200));
+    });
 }
 
 fn criterion_u32(c: &mut Criterion) {
@@ -49,6 +58,11 @@ fn criterion_u32(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen::<u32>());
     });
+    c.bench_function("rand_xorshift u32", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen::<u32>());
+    });
+
     c.bench_function("fastrand u32 in range", |b| {
         b.iter(|| fastrand::u32(20..200))
     });
@@ -68,6 +82,10 @@ fn criterion_u32(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen_range(20_u32..200));
     });
+    c.bench_function("rand_xorshift u32 in range", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen_range(20_u32..200));
+    });
 }
 
 fn criterion_i32(c: &mut Criterion) {
@@ -81,6 +99,10 @@ fn criterion_i32(c: &mut Criterion) {
     });
     c.bench_function("rand_pcg i32", |b| {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
+        b.iter(|| rng.gen::<i32>());
+    });
+    c.bench_function("rand_xorshift i32", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
         b.iter(|| rng.gen::<i32>());
     });
 
@@ -103,6 +125,10 @@ fn criterion_i32(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen_range(20_i32..200));
     });
+    c.bench_function("rand_xorshift i32 in range", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen_range(20_i32..200));
+    });
 }
 
 fn criterion_i64(c: &mut Criterion) {
@@ -118,6 +144,11 @@ fn criterion_i64(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen::<i64>());
     });
+    c.bench_function("rand_xorshift i64", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen::<i64>());
+    });
+
     c.bench_function("fastrand i64 in range", |b| {
         b.iter(|| fastrand::i64(-20..10))
     });
@@ -137,6 +168,10 @@ fn criterion_i64(c: &mut Criterion) {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
         b.iter(|| rng.gen_range(20_i64..200));
     });
+    c.bench_function("rand_xorshift i64 in range", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
+        b.iter(|| rng.gen_range(20_i64..200));
+    });
 }
 
 fn criterion_f64(c: &mut Criterion) {
@@ -146,8 +181,15 @@ fn criterion_f64(c: &mut Criterion) {
         let mut rng = rand::thread_rng();
         b.iter(|| rng.gen::<f64>());
     });
+    c.bench_function("rand random f64", |b| {
+        b.iter(|| rand::random::<f64>());
+    });
     c.bench_function("rand_pcg f32", |b| {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
+        b.iter(|| rng.gen::<f64>());
+    });
+    c.bench_function("rand_xorshift f64", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
         b.iter(|| rng.gen::<f64>());
     });
 }
@@ -159,8 +201,15 @@ fn criterion_f32(c: &mut Criterion) {
         let mut rng = rand::thread_rng();
         b.iter(|| rng.gen::<f32>());
     });
+    c.bench_function("rand random f32", |b| {
+        b.iter(|| rand::random::<f32>());
+    });
     c.bench_function("rand_pcg f64", |b| {
         let mut rng = rand_pcg::Lcg128Xsl64::from_entropy();
+        b.iter(|| rng.gen::<f32>());
+    });
+    c.bench_function("rand_xorshift f32", |b| {
+        let mut rng = rand_xorshift::XorShiftRng::from_entropy();
         b.iter(|| rng.gen::<f32>());
     });
 }
