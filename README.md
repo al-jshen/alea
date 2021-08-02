@@ -1,9 +1,8 @@
 # alea
 
-
-[![Crates.io](https://img.shields.io/crates/v/alea)](https://crates.io/crates/alea)
-[![Documentation](https://docs.rs/alea/badge.svg)](https://docs.rs/alea)
-![License](https://img.shields.io/crates/l/alea?label=License)
+[![Crates.io](https://img.shields.io/crates/v/alea.svg?style=for-the-badge&color=fc8d62&logo=rust)](https://crates.io/crates/alea)
+[![Documentation](https://img.shields.io/badge/docs.rs-alea-5E81AC?style=for-the-badge&labelColor=555555&logoColor=white)](https://docs.rs/alea)
+![License](https://img.shields.io/crates/l/alea?label=License&style=for-the-badge)
 
 A zero-dependency crate for fast number generation, with a focus on ease of use (no more passing `&mut rng` everywhere!).
 
